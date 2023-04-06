@@ -1,5 +1,6 @@
 const { ApolloServer } = require('@apollo/server');
 const { startStandaloneServer } = require('@apollo/server/standalone');
+const { GraphQLError } = require('graphql');
 const { v1: uuid } = require('uuid');
 
 const mongoose = require('mongoose');
@@ -160,9 +161,7 @@ const resolvers = {
 					.filter((book) => book.author === args.author);
 			}
 			if (args.genre) {
-				return books.filter((book) =>
-					book.genres.some((genre) => genre === args.genre)
-				);
+				return Book.find({ genres: [args.genre] }).populate('author');
 			}
 			if (args.author) {
 				return books.filter((book) => book.author === args.author);
@@ -186,25 +185,48 @@ const resolvers = {
 	Mutation: {
 		// works
 		addBook: async (root, args) => {
-			// books = books.concat(book);
-			// if (!authors.some((author) => author.name === args.author)) {
-			// 	authors = authors.concat({ name: args.author, id: uuid() });
-			// }
 			const author = new Author({ name: args.author });
-			const newAuthor = await author.save();
-			const book = new Book({ ...args, author: newAuthor.id });
-			const newBook = await book.save();
-			console.log(newBook);
-			return newBook.populate('author');
+			try {
+				await author.save();
+			} catch (error) {
+				throw new GraphQLError('saving book failed', {
+					extensions: {
+						code: 'BAD_USER_INPUT',
+						invalidArgs: args.name,
+						error,
+					},
+				});
+			}
+
+			const book = new Book({ ...args, author: author.id });
+			try {
+				await book.save();
+			} catch (error) {
+				throw new GraphQLError('saving book failed', {
+					extensions: {
+						code: 'BAD_USER_INPUT',
+						invalidArgs: args.name,
+						error,
+					},
+				});
+			}
+
+			return book.populate('author');
 		},
-		editAuthor: (root, args) => {
-			const foundAuthor = authors.find((author) => author.name === args.name);
-			if (!foundAuthor) return null;
-			const newAuthor = { ...foundAuthor, born: args.setBornTo };
-			authors = authors.map((author) =>
-				author.name === args.name ? newAuthor : author
+		// works
+		editAuthor: async (root, args) => {
+			const foundAuthor = await Author.findOneAndUpdate(
+				{ name: args.name },
+				{ born: args.setBornTo },
+				{ new: true }
 			);
-			return newAuthor;
+			if (!foundAuthor) return null;
+
+			// const newAuthor = { ...foundAuthor, born: args.setBornTo };
+			// authors = authors.map((author) =>
+			// 	author.name === args.name ? newAuthor : author
+			// );
+			return foundAuthor;
 		},
 	},
 };
