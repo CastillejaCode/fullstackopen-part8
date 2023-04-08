@@ -193,7 +193,13 @@ const resolvers = {
 
 		//works
 		allAuthors: async () => {
-			return Author.find({});
+			const authors = await Author.find({});
+			return Promise.all(
+				authors.map(async (auth) => {
+					const bookCount = await Book.countDocuments({ author: auth.id });
+					return { ...auth._doc, bookCount, id: auth._doc._id };
+				})
+			);
 
 			// return authors.map((author) => {
 			// 	const bookCount = books.filter(

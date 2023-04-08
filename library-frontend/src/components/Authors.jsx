@@ -4,7 +4,6 @@ import BirthForm from './BirthForm';
 
 const Authors = () => {
 	const { data, loading, error } = useQuery(ALL_AUTHORS);
-	console.log(data);
 	if (loading) return <div>Loading Data...</div>;
 	if (error) return <p>Error : {error.message}</p>;
 

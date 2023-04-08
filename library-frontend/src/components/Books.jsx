@@ -1,3 +1,4 @@
+import React from 'react';
 import { useQuery } from '@apollo/client';
 import { ALL_BOOKS } from '../queries';
 
@@ -14,14 +15,14 @@ const Books = () => {
 			<table>
 				<tbody>
 					<tr>
-						<th></th>
+						<th />
 						<th>author</th>
 						<th>published</th>
 					</tr>
 					{data.allBooks.map((a) => (
 						<tr key={a.title}>
 							<td>{a.title}</td>
-							<td>{a.author}</td>
+							<td>{a.author.name}</td>
 							<td>{a.published}</td>
 						</tr>
 					))}
