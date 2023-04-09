@@ -1,6 +1,6 @@
+import React from 'react';
 import { useMutation } from '@apollo/client';
-import { EDIT_AUTHOR } from '../queries';
-import { ALL_AUTHORS } from '../queries';
+import { EDIT_AUTHOR, ALL_AUTHORS } from '../queries';
 
 const BirthForm = ({ authors }) => {
 	const [editYear] = useMutation(EDIT_AUTHOR, {
@@ -10,7 +10,7 @@ const BirthForm = ({ authors }) => {
 	const submit = (event) => {
 		event.preventDefault();
 		const name = event.target.names.value;
-		const setBornTo = parseInt(event.target.year.value);
+		const setBornTo = parseInt(event.target.year.value, 10);
 		editYear({ variables: { name, setBornTo } });
 		event.target.names.value = '';
 		event.target.year.value = '';

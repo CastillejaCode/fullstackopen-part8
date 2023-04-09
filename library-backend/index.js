@@ -183,7 +183,7 @@ const resolvers = {
 					.filter((book) => book.author === args.author);
 			}
 			if (args.genre) {
-				return Book.find({ genres: [args.genre] }).populate('author');
+				return Book.find({ genres: args.genre }).populate('author');
 			}
 			if (args.author) {
 				return books.filter((book) => book.author === args.author);

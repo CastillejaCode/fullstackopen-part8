@@ -7,9 +7,6 @@ const Recommend = () => {
 	const genre = useQuery(ME, {
 		fetchPolicy: 'network-only',
 	});
-
-	console.log(genre);
-
 	if (genre.data === undefined || genre.data.me === null)
 		return <div>User not logged in!</div>;
 	if (loading) return <div>Loading...</div>;

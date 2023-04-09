@@ -8,6 +8,7 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import App from './App';
+import './index.css';
 
 const authlink = setContext((_, { headers }) => {
 	const token = localStorage.getItem('token');
