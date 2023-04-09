@@ -209,8 +209,8 @@ const resolvers = {
 			// 	return { ...author, bookCount };
 			// });
 		},
-		me: (root, args, context) => {
-			return context.currentUser;
+		me: (root, args, { currentUser }) => {
+			return currentUser;
 		},
 	},
 	Mutation: {
