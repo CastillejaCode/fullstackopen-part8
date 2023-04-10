@@ -4,9 +4,7 @@ import { ALL_BOOKS } from '../queries';
 
 const Books = () => {
 	const allBooks = useQuery(ALL_BOOKS);
-	const { data, loading, error, refetch, variables } = useQuery(ALL_BOOKS, {
-		variables: { genre: null },
-	});
+	const { data, loading, error, refetch, variables } = useQuery(ALL_BOOKS);
 
 	if (loading) return <div>Loading...</div>;
 	if (error) return <div>{error.message}</div>;

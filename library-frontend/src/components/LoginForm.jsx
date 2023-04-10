@@ -36,6 +36,10 @@ const LoginForm = ({ setToken }) => {
 				</label>
 				<button type='submit'>Submit</button>
 			</form>
+			<div>
+				username: test <br />
+				password: password
+			</div>
 		</div>
 	);
 };
