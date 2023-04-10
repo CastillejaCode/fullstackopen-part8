@@ -14,7 +14,6 @@ const resolvers = {
 		bookCount: async () => Book.collection.countDocuments(),
 		authorCount: async () => Author.collection.countDocuments(),
 
-		// Works
 		allBooks: async (root, args) => {
 			if (args.genre && args.author) {
 				return books
@@ -32,6 +31,7 @@ const resolvers = {
 
 		allAuthors: async () => {
 			const authors = await Author.find({});
+			console.log('Author Find');
 			return Promise.all(
 				authors.map(async (auth) => {
 					const bookCount = await Book.countDocuments({ author: auth.id });
